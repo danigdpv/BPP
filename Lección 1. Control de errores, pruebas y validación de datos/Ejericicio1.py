@@ -1,5 +1,7 @@
 import pandas as pd
 
+class ErrorIncompleto(Exception):
+    pass
 
 # Esta función gestiona la lectura del fichero y dará error si no lo puede leer cerrando el programa.
 def lectura_fichero():
@@ -9,14 +11,16 @@ def lectura_fichero():
     except IOError:
         print("El fichero no existe o no se disponen de los permisos necesarios para leerlo")
         exit()
+
 #Esta función comprueba que existan las 12 columnas de los 12 meses. Si no cerrará el programa.
 def columnas(contenido):
     count =  len(contenido.columns)
-    if count == 12:
-        print("El Dataset contiene la información de los 12 meses del año")
-    else:
-        print("El dataset está incompleto. No contiene información de los 12 meses del año")
-        exit()
+    try:
+        if count == 12:
+            print("El Dataset contiene la información de los 12 meses del año")
+    except ErrorIncompleto:
+            print("El dataset está incompleto. No contiene información de los 12 meses del año")
+            exit()
 
 #Esta función comprueba que todos los valores son tipo float. Si hay un valor string lo transformará a numérico.
 def comp_cont(contenido):
