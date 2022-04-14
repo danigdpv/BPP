@@ -1,4 +1,5 @@
 import pandas as pd
+import plotly.express as px
 
 class ErrorIncompleto(Exception):
     pass
@@ -37,24 +38,33 @@ def suma(contenido):
     return totalsum
 
 def gasto(contenido):
-    return contenido.min()
+    return contenido.idxmin()
 
 def ahorro(contenido):
-    return contenido.max()
+    return contenido.idxmax()
 
 def media(contenido):
     return contenido.mean()
 
+def sumgastos(contenido):
+    return contenido[contenido < 0].sum()
+
+def sumahorros(contenido):
+    return contenido[contenido > 0].sum()
+
+def grafico(contenido):
+    fig = px.line(x=contenido.index, y=contenido)
+    fig.show()
+
 def main():
     df= lectura_fichero()
-    print(df)
-    columnas(df)
     df = comp_cont(df)
-    print(gasto(suma(df)))
-    print(ahorro(suma(df)))
-    print(media(suma(df)))
-    print(suma(suma(df)))
-
+    print('\nEl mes que más gasto ha habido ha sido el mes de '+gasto(suma(df)))
+    print('\nEl mes que más se ha ahorrado ha sido '+ahorro(suma(df)))
+    print('\nLa media de gasto durante el año ha sido de '+str(media(suma(df))))
+    print('\nLos gastos totales a lo largo del año han sido de '+str(sumgastos(suma(df))))
+    print('\nLos ingresos totales a lo largo del año han sido de '+str(sumahorros(suma(df))))
+    grafico(suma(df))
 
 
 if __name__ == "__main__":
